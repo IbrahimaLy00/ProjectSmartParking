@@ -52,7 +52,7 @@ const ContactPage: React.FC = () => {
             <Phone className="h-6 w-6 text-blue-600 mt-1" />
             <div>
               <h4 className="font-medium text-gray-900">Téléphone</h4>
-              <p className="text-gray-600">+33 1 23 45 67 89</p>
+              <p className="text-gray-600">+1 512 555 0123</p>
             </div>
           </div>
 
@@ -62,7 +62,7 @@ const ContactPage: React.FC = () => {
               <h4 className="font-medium text-gray-900">Adresse</h4>
               <p className="text-gray-600">
                 Saint Boniface Parking<br />
-                Montréal, QC
+                Winnipeg, MB
               </p>
             </div>
           </div>
