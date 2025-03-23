@@ -1,46 +1,177 @@
-# Getting Started with Create React App
+# Système de Gestion de Parking Intelligent
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Ce projet est une application web de gestion de parking qui permet de suivre en temps réel l'état des places de parking et de gérer les réservations.
 
-## Available Scripts
+## Structure du Projet
 
-In the project directory, you can run:
+```
+parking-interface/
+├── src/
+│   ├── pages/
+│   │   ├── ParkingPage.tsx      # Page principale affichant l'état des places
+│   │   └── ReservationPage.tsx  # Page de réservation des places
+│   ├── services/
+│   │   ├── firebaseService.ts   # Configuration et services Firebase
+│   │   ├── parkingService.ts    # Logique métier pour le parking
+│   │   ├── notificationService.ts # Service de notifications
+│   │   └── initializeParkingSpots.ts # Initialisation des places
+│   └── App.tsx                  # Composant principal
+├── server/
+│   └── src/
+│       └── index.ts             # Serveur backend pour les notifications
+└── package.json                 # Dépendances et scripts
+```
 
-### `npm start`
+## Fonctionnalités
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### 1. Suivi en Temps Réel
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+- Affichage de l'état des places de parking (libre/occupée)
+- Mise à jour automatique toutes les 5 secondes
+- Interface visuelle avec codes couleur (vert pour libre, rouge pour occupé)
 
-### `npm test`
+### 2. Système de Réservation
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- Formulaire de réservation avec :
+  - Sélection de la place
+  - Informations personnelles (nom, email, téléphone)
+  - Date et heure de réservation
+- Vérification de disponibilité en temps réel
+- Confirmation par email
 
-### `npm run build`
+### 3. Notifications
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- Envoi d'email de confirmation après réservation
+- Support pour les notifications SMS (via Twilio)
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Configuration Technique
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Firebase
 
-### `npm run eject`
+- Base de données Firestore pour le stockage des données
+- Collection "parkings" contenant les places avec les champs :
+  - id: identifiant unique
+  - name: nom de la place
+  - status: 'free' ou 'occupied'
+  - timestamp: date de dernière mise à jour
+  - reservation: détails de la réservation (si occupée)
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+### Backend
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- Serveur Node.js avec Express
+- Gestion des notifications SMS via Twilio
+- Port 3001 pour le serveur
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+### Frontend
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+- React avec TypeScript
+- Tailwind CSS pour le style
+- Material-UI pour certains composants
+- Port 3000 pour l'application
 
-## Learn More
+## Installation et Démarrage
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+1. Installation des dépendances :
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```bash
+# Installation des dépendances frontend
+npm install
+
+# Installation des dépendances backend
+cd server
+npm install
+```
+
+2. Configuration des variables d'environnement :
+
+- Créer un fichier `.env` dans le dossier `server` avec :
+
+```
+TWILIO_ACCOUNT_SID=votre_sid
+TWILIO_AUTH_TOKEN=votre_token
+TWILIO_PHONE_NUMBER=votre_numero
+```
+
+3. Démarrage des services :
+
+```bash
+# Démarrer le serveur backend
+cd server
+npm run dev
+
+# Dans un nouveau terminal, démarrer le frontend
+cd ..
+npm start
+```
+
+## Utilisation
+
+1. Accéder à l'application : http://localhost:3000
+2. Voir l'état des places sur la page principale
+3. Cliquer sur "Réserver" pour accéder au formulaire de réservation
+4. Remplir le formulaire et soumettre la réservation
+5. Recevoir la confirmation par email
+
+## Structure des Données
+
+### Place de Parking
+
+```typescript
+interface ParkingSpot {
+  id: string; // Identifiant unique (ex: 'parking_1')
+  name: string; // Nom de la place
+  status: "free" | "occupied"; // État de la place
+  timestamp: string; // Date de dernière mise à jour
+  reservation?: {
+    // Détails de la réservation (si occupée)
+    name: string;
+    date: string;
+    time: string;
+  };
+}
+```
+
+### Réservation
+
+```typescript
+interface FormData {
+  spotId: string; // ID de la place réservée
+  name: string; // Nom du client
+  email: string; // Email du client
+  phone: string; // Téléphone du client
+  date: string; // Date de réservation
+  time: string; // Heure de réservation
+}
+```
+
+## Maintenance
+
+### Réinitialisation des Places
+
+Pour réinitialiser toutes les places à l'état "libre" :
+
+```typescript
+await resetParkingSpots();
+```
+
+### Mise à Jour du Statut
+
+Pour mettre à jour le statut d'une place :
+
+```typescript
+await updateSpotStatus(spotId, "free" | "occupied");
+```
+
+## Sécurité
+
+- Les clés API et tokens sont stockés dans les variables d'environnement
+- Validation des données côté serveur
+- Vérification de disponibilité avant réservation
+
+## Support
+
+Pour toute question ou problème :
+
+1. Vérifier les logs dans la console du navigateur
+2. Vérifier les logs du serveur backend
+3. S'assurer que tous les services (Firebase, Twilio) sont correctement configurés
