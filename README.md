@@ -175,3 +175,6 @@ Pour toute question ou problème :
 1. Vérifier les logs dans la console du navigateur
 2. Vérifier les logs du serveur backend
 3. S'assurer que tous les services (Firebase, Twilio) sont correctement configurés
+
+
+[![Visitez le site](https://img.shields.io/badge/Visitez_le_site-Cliquez_ici-blue?style=for-the-badge)](https://parking-interface-app-58c7ed9540cd.herokuapp.com/)
