@@ -1,3 +1,122 @@
+# Saint Boniface Parking
+
+Application de gestion de parking pour Saint Boniface.
+
+## Prérequis
+
+### 1. Installation de Node.js
+
+1. Télécharger Node.js depuis [nodejs.org](https://nodejs.org/)
+2. Choisir la version LTS (Long Term Support) >= 18.0.0
+3. Suivre les instructions d'installation pour votre système d'exploitation :
+
+   - **Windows** : Exécuter l'installateur téléchargé
+   - **macOS** : Utiliser l'installateur ou Homebrew (`brew install node`)
+   - **Linux** : Utiliser le gestionnaire de paquets de votre distribution
+
+4. Vérifier l'installation en ouvrant un terminal et en tapant :
+
+```bash
+node --version  # Doit afficher v18.x.x ou supérieur
+npm --version   # Doit afficher 9.x.x ou supérieur
+```
+
+### 2. Installation de Git si tu as github not necessary de faire ca
+
+1. Télécharger Git depuis [git-scm.com](https://git-scm.com/)
+2. Suivre les instructions d'installation pour votre système d'exploitation
+3. Vérifier l'installation :
+
+```bash
+git --version
+```
+
+## Installation
+
+1. Cloner le projet dans ton editeur de texte SVP
+
+## URL se trouve sur github la ou cest ecrit code tu copies le lien
+
+```bash
+git clone [URL]
+cd parking-interface
+```
+
+2. Installer les dépendances
+
+## si tu es sur powershell tape dabord cette commande: Get-ExecutionPolicy -Scope CurrentUser
+
+```bash
+npm install
+```
+
+3. Configurer les variables d'environnement
+
+- Copier le fichier `.env.example` en `.env`
+
+```bash
+cp .env.example .env
+```
+
+- Remplir le fichier `.env` avec les bonnes valeurs des variables d'environnement Firebase
+
+## Démarrage en développement
+
+```bash
+npm start
+```
+
+L'application sera accessible à l'adresse [http://localhost:3000](http://localhost:3000)
+
+## Scripts disponibles
+
+- `npm start` : Lance l'application en mode développement
+- `npm test` : Lance les tests
+- `npm run build` : Crée une version de production
+- `npm run eject` : Éjecte la configuration de Create React App
+
+## Structure du projet
+
+```
+src/
+  ├── components/     # Composants réutilisables
+  ├── layouts/       # Layouts de l'application
+  ├── pages/         # Pages de l'application
+  ├── services/      # Services (Firebase, etc.)
+  └── App.tsx        # Point d'entrée de l'application
+```
+
+## Technologies utilisées
+
+- React
+- TypeScript
+- Tailwind CSS
+- Firebase
+- Material-UI
+
+## Contribution
+
+1. Créer une branche pour votre fonctionnalité
+
+```bash
+git checkout -b feature/nom-de-la-fonctionnalite
+```
+
+2. Commiter vos changements
+
+```bash
+git add .
+git commit -m "Description des changements"
+```
+
+3. Pousser vers GitHub
+
+```bash
+git push origin feature/nom-de-la-fonctionnalite
+```
+
+4. Créer une Pull Request sur GitHub
+
 # Système de Gestion de Parking Intelligent
 
 Ce projet est une application web de gestion de parking qui permet de suivre en temps réel l'état des places de parking et de gérer les réservations.
