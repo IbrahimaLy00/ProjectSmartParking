@@ -25,12 +25,11 @@ export const getAvailableParkingSpots = async (): Promise<ParkingSpot[]> => {
     return availableSpotsCache;
   }
 
+  // getAvailableSpots retourne déjà uniquement les places libres et non réservées
   const spots = await getAvailableSpots();
-  // Filtrer les places qui ont déjà une réservation
-  const availableSpots = spots.filter(spot => !spot.reservation);
-  availableSpotsCache = availableSpots;
+  availableSpotsCache = spots;
   lastAvailableUpdateTime = Date.now();
-  return availableSpots;
+  return spots;
 };
 
 export const reserveSpot = async (
@@ -40,15 +39,12 @@ export const reserveSpot = async (
   time: string
 ): Promise<{ success: boolean; message: string }> => {
   try {
-    const spot = parkingSpots.find(s => s.id === spotId);
+    // Vérifier à nouveau si la place est disponible
+    const availableSpots = await getAvailableParkingSpots();
+    const spot = availableSpots.find(s => s.id === spotId);
     
     if (!spot) {
-      return { success: false, message: 'Place non trouvée' };
-    }
-
-    // Vérifier si la place a déjà une réservation
-    if (spot.reservation) {
-      return { success: false, message: 'Cette place a déjà une réservation' };
+      return { success: false, message: 'Place non trouvée ou déjà réservée' };
     }
 
     await reserveParkingSpot(spotId, name, date, time);

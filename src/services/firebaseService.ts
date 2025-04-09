@@ -118,10 +118,14 @@ export const releaseParkingSpot = async (spotId: string) => {
 // Fonction pour obtenir les places disponibles
 export const getAvailableSpots = async (): Promise<ParkingSpotData[]> => {
   const parkingRef = collection(db, 'parkings');
-  const q = query(parkingRef, where('status', '==', 'free'));
-  const snapshot = await getDocs(q);
-  return snapshot.docs.map(doc => ({
+  // Récupérer toutes les places
+  const snapshot = await getDocs(parkingRef);
+  
+  // Filtrer pour ne garder que les places libres ET sans réservation
+  const spots = snapshot.docs.map(doc => ({
     id: doc.id,
     ...doc.data()
   })) as ParkingSpotData[];
+  
+  return spots.filter((spot: ParkingSpotData) => spot.status === 'free' && !spot.reservation);
 }; 
