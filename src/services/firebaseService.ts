@@ -98,7 +98,16 @@ export const reserveParkingSpot = async (
   date: string,
   time: string
 ) => {
-  return updateParkingSpotStatus(spotId, 'occupied');
+  // Ne pas changer le statut de la place, juste enregistrer la réservation
+  const spotRef = doc(db, 'parkings', spotId);
+  await updateDoc(spotRef, {
+    reservation: {
+      name,
+      date,
+      time
+    },
+    timestamp: Date.now()
+  });
 };
 
 // Fonction pour libérer une place
